@@ -6,8 +6,7 @@ from flask_cors import CORS
 import json
 import soup
 from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.common.action_chains import ActionChains
+
 
 app = Flask(__name__)
 CORS(app)
