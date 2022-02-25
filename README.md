@@ -1,6 +1,6 @@
 # contest-api
 <h3> Base Url : https://contest-details.herokuapp.com/api/ </h3>
-Request : https://contest-details.herokuapp.com/{platform-name}/{username}
+Request : https://contest-details.herokuapp.com/api/{platform-name}/{username}
 
 ## Platforms :
 ![](https://img.shields.io/badge/-Codeforces-red)
