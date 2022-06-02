@@ -7,15 +7,16 @@ import json
 import soup
 from bs4 import BeautifulSoup
 
-
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
 
+
 class Contest(Resource):
-    def get(self,platform,username):
+    def get(self, platform, username):
         user = soup.Data(username)
         return user.get_details(platform)
+
 
 api.add_resource(Contest, "/api/<string:platform>/<string:username>")
 

@@ -24,9 +24,21 @@ class Data:
 
         # getting cf contest details of user from Web-Scrapping (html)
         url2 = 'https://codeforces.com/contests/with/' + self.__username
+        url3 = 'https://codeforces.com/profile/' + self.__username
+        r1 = requests.get(url3)
         r = requests.get(url2)
+        htmlContent2 = r1.content
         htmlContent = r.content
+        soup2 = BeautifulSoup(htmlContent2, 'html.parser')
         soup = BeautifulSoup(htmlContent, 'html.parser')
+
+        # No. of problem solved
+        no_problem_solved = soup2.find('div', class_='_UserActivityFrame_counterValue').text
+        if no_problem_solved[2] == " " :
+            no_problems = no_problem_solved[0:2]
+        else : no_problems = no_problem_solved[0:3]
+
+
         table = soup.find('table', attrs={'class': 'user-contests-table'})
         table_body = table.find('tbody')
         rows = table_body.find_all('tr')
@@ -44,7 +56,8 @@ class Data:
             'avatar': avatar,
             'rank': rank,
             'max rank': maxRank,
-            'contest': contests
+            'contest': contests,
+            'problem solved': no_problems
         }
         return jsonify(result)
 
@@ -81,8 +94,10 @@ class Data:
             ratings.append(int(article['rating']))
         # No. of problem solved
         problem_solved = soup.find('section', class_='rating-data-section problems-solved').find('h5').text
-        s1 = slice(14, 16)
-        problems = int(problem_solved[s1])   # Total number of problems solved
+        if problem_solved[16] == ")" :
+            problems = problem_solved[14:16]
+        else : problems = problem_solved[14:17]
+
         # profile
         avatar = soup.find('div', class_='user-details-container').find('img')
         links = avatar['src']
