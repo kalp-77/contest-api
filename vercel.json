@@ -12,11 +12,7 @@
   "routes":[
     {
       "src":"/(.*)",
-      "dest":"api/main.py"
-    },
-    {
-      "src":"/(.*)",
-      "dest":"api/soup.py"
+      "dest":"/$1"
     }
   ]
 }
