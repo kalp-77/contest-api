@@ -1,6 +1,6 @@
 # contest-api
 <h3> Base Url : https://contest-api.vercel.app/api/ </h3>
-Request : https://contest-api.vercel.app/api/{platform}/{username}
+<h5> Request : https://contest-api.vercel.app/api/{platform}/{username} </h5>
 ex : https://contest-api.vercel.app/api/codeforces/kalp-77
 
 ## Platforms :
