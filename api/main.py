@@ -21,4 +21,4 @@ class Contest(Resource):
 api.add_resource(Contest, "/api/<string:platform>/<string:username>")
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=False, host='0.0.0.0')
