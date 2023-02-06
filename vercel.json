@@ -3,12 +3,20 @@
     {
       "src": "api/main.py",
       "use": "@vercel/python"
+    },
+    {
+      "src": "api/soup.py",
+      "use": "@vercel/python"
     }
   ],
   "routes":[
     {
       "src":"/(.*)",
       "dest":"api/main.py"
+    },
+    {
+      "src":"/(.*)",
+      "dest":"api/soup.py"
     }
   ]
 }
