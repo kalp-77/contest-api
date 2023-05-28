@@ -1,24 +1,31 @@
-import flask
-import requests
-from flask import Flask, jsonify
-from flask_restful import Api, Resource, reqparse
+from flask import Flask
 from flask_cors import CORS
-import json
+from flask_restful import Api, Resource
+
+import contest_details_soup
 import soup
-from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
 
 
-class Contest(Resource):
+class UserInfo(Resource):
     def get(self, platform, username):
         user = soup.Data(username)
         return user.get_details(platform)
 
 
-api.add_resource(Contest, "/api/<string:platform>/<string:username>")
+class Contest(Resource):
+    def get(self):
+        contest = contest_details_soup.Data()
+        return contest.get_contest()
+
+
+api.add_resource(UserInfo, "/api/<string:platform>/<string:username>")
+api.add_resource(Contest, "/api/all")
+
 
 if __name__ == '__main__':
+    app.debug = True
     app.run()
