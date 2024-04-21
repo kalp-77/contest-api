@@ -32,8 +32,8 @@ class Data:
             if data['data-ace']:
                 try:
                     expression = re.sub(pattern, r'"title":"\1 : \"\2\""', data['data-ace'])
-                    text = expression.replace('&quot;', '"')
-                    event = json.loads(text)
+                    event = json.loads(expression)
+
                     if event['location'].split('.')[0] in allowed_sources:
                         start_date_object = datetime.strptime(event['time']['start'], "%B %d, %Y %H:%M:%S")
                         start_date = start_date_object.strftime("%B %d, %Y")
@@ -63,7 +63,7 @@ class Data:
                             'end_time': contest_end_time,
                             'time_zone': contest_time_zone
                         }
-                    contest_result.append(result)
+                        contest_result.append(result)
                 except: continue
 
     def get_contest(self):
