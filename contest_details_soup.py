@@ -1,7 +1,7 @@
 import json
 import re
+import html
 from datetime import datetime
-
 import requests
 from bs4 import BeautifulSoup
 from dateutil.parser import parse
@@ -30,39 +30,41 @@ class Data:
         for contest in contest_list:
             data = contest.findNext('a', class_='data-ace')
             if data['data-ace']:
-                expression = re.sub(pattern, r'"title":"\1 : \"\2\""', data['data-ace'])
-                event = json.loads(expression)
+                try:
+                    expression = re.sub(pattern, r'"title":"\1 : \"\2\""', data['data-ace'])
+                    text = expression.replace('&quot;', '"')
+                    event = json.loads(text)
+                    if event['location'].split('.')[0] in allowed_sources:
+                        start_date_object = datetime.strptime(event['time']['start'], "%B %d, %Y %H:%M:%S")
+                        start_date = start_date_object.strftime("%B %d, %Y")
+                        start_time = start_date_object.strftime("%H:%M:%S")
+                        end_date_object = datetime.strptime(event['time']['end'], "%B %d, %Y %H:%M:%S")
+                        end_date = end_date_object.strftime("%B %d, %Y")
+                        end_time = end_date_object.strftime("%H:%M:%S")
 
-                if event['location'].split('.')[0] in allowed_sources:
-                    start_date_object = datetime.strptime(event['time']['start'], "%B %d, %Y %H:%M:%S")
-                    start_date = start_date_object.strftime("%B %d, %Y")
-                    start_time = start_date_object.strftime("%H:%M:%S")
-                    end_date_object = datetime.strptime(event['time']['end'], "%B %d, %Y %H:%M:%S")
-                    end_date = end_date_object.strftime("%B %d, %Y")
-                    end_time = end_date_object.strftime("%H:%M:%S")
+                        contest_platform = event['location'].split('.')[0]
+                        contest_url = event['desc'].split('url: ')[1]
+                        contest_name = event['title']
+                        contest_duration = contest.findNext('div', class_='duration').text
+                        contest_start_time = start_time
+                        contest_start_date = start_date
+                        contest_end_time = end_time
+                        contest_end_date = end_date
+                        contest_time_zone = event['time']['zone']
 
-                    contest_platform = event['location'].split('.')[0]
-                    contest_url = event['desc'].split('url: ')[1]
-                    contest_name = event['title']
-                    contest_duration = contest.findNext('div', class_='duration').text
-                    contest_start_time = start_time
-                    contest_start_date = start_date
-                    contest_end_time = end_time
-                    contest_end_date = end_date
-                    contest_time_zone = event['time']['zone']
-
-                    result = {
-                        'platform': contest_platform,
-                        'title': contest_name,
-                        'url': contest_url,
-                        'start_date': contest_start_date,
-                        'start_time': contest_start_time,
-                        'duration': contest_duration,
-                        'end_date': contest_end_date,
-                        'end_time': contest_end_time,
-                        'time_zone': contest_time_zone
-                    }
+                        result = {
+                            'platform': contest_platform,
+                            'title': contest_name,
+                            'url': contest_url,
+                            'start_date': contest_start_date,
+                            'start_time': contest_start_time,
+                            'duration': contest_duration,
+                            'end_date': contest_end_date,
+                            'end_time': contest_end_time,
+                            'time_zone': contest_time_zone
+                        }
                     contest_result.append(result)
+                except: continue
 
     def get_contest(self):
         url = 'https://clist.by/?view=list&favorite=off'

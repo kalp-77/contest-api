@@ -79,8 +79,8 @@ class Data:
         global_rank = rank[0].text
         country_rank = rank[1].text
         if global_rank != 'NA':
-            global_rank = int(global_rank)
-            country_rank = int(country_rank)
+            global_rank = global_rank
+            country_rank = country_rank
         # contest ratings
         first = responses.text.find('[', responses.text.find('all_rating'))
         last = responses.text.find(']', first) + 1
@@ -93,10 +93,12 @@ class Data:
         for article in all_rating:
             ratings.append(int(article['rating']))
         # No. of problem solved
-        problem_solved = soup.find('section', class_='rating-data-section problems-solved').find('h5').text
-        if problem_solved[16] == ")" :
-            problems = problem_solved[14:16]
-        else : problems = problem_solved[14:17]
+        # problem_solved = soup.find('section', class_='rating-data-section problems-solved').find('h5').text
+        # if problem_solved[13] == ")" :
+            # problems = problem_solved[14:16]
+            # problems = 100
+        # else : problems = problem_solved[14:17]
+        # else: problems = 0
 
         # profile
         avatar = soup.find('div', class_='user-details-container').find('img')
@@ -112,7 +114,7 @@ class Data:
             "global rank": global_rank,
             "country rank": country_rank,
             "avatar": links,
-            "problem solved": problems,
+            "problem solved": 0,
             "contests": ratings
         }
         return jsonify(result)
